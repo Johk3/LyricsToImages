@@ -8,6 +8,9 @@ class LyricsToImages:
         self.lyrics = pickle.load(open("lyrics.p", "rb"))
         self.songs = ["Shotta Flow", "Shotta Flow 2", "IDK"]
         self.lyrdic = None
+        self.urls = ["https://www.youtube.com/watch?v=3W0e7aI0gAg",
+                    "https://www.youtube.com/watch?v=_Pnam7Fg5jQ",
+                    "https://www.youtube.com/watch?v=lFPWcn68nz0"]
         pass
 
     def getLyrics(self, creator):
@@ -45,15 +48,22 @@ class LyricsToImages:
     def getAudio(self):
         # Get the audio of the music from some source
         for song in self.songs:
+            tempUrls = []
             textToSearch = song
             query = urllib.parse.quote(textToSearch)
             url = "https://www.youtube.com/results?search_query=" + query
             response = urllib.request.urlopen(url)
             html = response.read()
             soup = BeautifulSoup(html, 'html.parser')
+            i = 0
+            print(song)
             for vid in soup.findAll(attrs={'class': 'yt-uix-tile-link'}):
-                print('https://www.youtube.com' + vid['href'])
-            break
+                print('{}. https://www.youtube.com'.format(i) + vid['href'])
+                tempUrls.append('https://www.youtube.com' + vid['href'])
+                i += 1
+            select = int(input(": "))
+            self.urls.append(tempUrls[select])
+
 
     def compileVideo(self):
         # Merge the lyrics and images in sync together to form a one solid video
