@@ -1,10 +1,13 @@
 import lyricsgenius
 import pickle
+import urllib.request
+from bs4 import BeautifulSoup
 
 class LyricsToImages:
     def __init__(self):
         self.lyrics = pickle.load(open("lyrics.p", "rb"))
         self.songs = ["Shotta Flow", "Shotta Flow 2", "IDK"]
+        self.lyrdic = None
         pass
 
     def getLyrics(self, creator):
@@ -36,11 +39,21 @@ class LyricsToImages:
                 if line != "" and line != " " and "[" not in line:
                     lyrdic[self.songs[i]].append(line.split(" "))
             i += 1
+        self.lyrdic = lyrdic
         print("Lyrics ready!")
 
     def getAudio(self):
         # Get the audio of the music from some source
-        pass
+        for song in self.songs:
+            textToSearch = song
+            query = urllib.parse.quote(textToSearch)
+            url = "https://www.youtube.com/results?search_query=" + query
+            response = urllib.request.urlopen(url)
+            html = response.read()
+            soup = BeautifulSoup(html, 'html.parser')
+            for vid in soup.findAll(attrs={'class': 'yt-uix-tile-link'}):
+                print('https://www.youtube.com' + vid['href'])
+            break
 
     def compileVideo(self):
         # Merge the lyrics and images in sync together to form a one solid video
