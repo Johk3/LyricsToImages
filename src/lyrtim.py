@@ -38,6 +38,10 @@ class LyricsToImages:
             i += 1
         print("Lyrics ready!")
 
+    def getAudio(self):
+        # Get the audio of the music from some source
+        pass
+
     def compileVideo(self):
         # Merge the lyrics and images in sync together to form a one solid video
         pass
