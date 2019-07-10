@@ -67,4 +67,8 @@ class LyricsToImages:
 
     def compileVideo(self):
         # Merge the lyrics and images in sync together to form a one solid video
+
+        # Translate the whole audio of the music into text (Include time stamps)
+
+        # Try to match up the genius lyrics with the songs lyrics
         pass
