@@ -36,6 +36,7 @@ class LyricsToImages:
         # Get images randomly from google images
         # Lyrdic stores all the lyrics corresponding to each song
         lyrdic = {}
+        lyrlist = []
 
         for song in self.songs:
             lyrdic[song] = []
@@ -46,8 +47,11 @@ class LyricsToImages:
             for line in lyrics:
                 if line != "" and line != " " and "[" not in line:
                     lyrdic[self.songs[i]].append(line.split(" "))
+                    lyrlist.append(line.split(" "))
             i += 1
-        self.lyrdic = lyrdic
+
+        # Might want to change this to lyrdic in the future
+        self.lyrdic = lyrlist
         print("Lyrics ready!")
 
     def getAudio(self):
@@ -78,18 +82,21 @@ class LyricsToImages:
         for song in self.urls:
             break
             # Download the song
-            ydl_opts = {
-                'format': 'bestaudio/best',
-                'postprocessors': [{
-                    'key': 'FFmpegExtractAudio',
-                    'preferredcodec': 'mp3',
-                    'preferredquality': '192',
-                }],
-            }
+            # ydl_opts = {
+            #     'format': 'bestaudio/best',
+            #     'postprocessors': [{
+            #         'key': 'FFmpegExtractAudio',
+            #         'preferredcodec': 'mp4',
+            #         'preferredquality': '192',
+            #     }],
+            # }
+            # with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            ydl_opts = {}
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([song])
-            print("Downloaded {}.mp3".format(self.songs[i]))
-            move = glob.glob("*.mp3")[0]
+            print("Downloaded {}.mp4".format(self.songs[i]))
+            system("rm *.webm")
+            move = glob.glob("*.mkv")[0]
             system('mv "{}" songs'.format(move))
             i += 1
-            break
+        return self.lyrdic
